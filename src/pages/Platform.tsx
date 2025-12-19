@@ -41,7 +41,6 @@ export default function APITemplatePlatform() {
   const sidebarItems = [
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { id: 'team', icon: Users, label: 'Team' },
     { id: 'settings', icon: Settings, label: 'Settings' },
   ];
 
@@ -59,7 +58,7 @@ export default function APITemplatePlatform() {
   };
 
   return (
-    <div className={`flex h-screen ml-6 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
+    <div className={`flex h-screen ml-0  ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
       {/* Lateral Sidebar */}
       <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} ${
         isDarkMode 
@@ -67,8 +66,8 @@ export default function APITemplatePlatform() {
           : 'bg-gradient-to-b from-purple-700 to-purple-900'
       } text-white flex flex-col transition-all duration-300`}>
         <div className={`p-6 border-b border-purple-600 ${!isSidebarOpen && 'px-4'}`}>
-          <h1 className={`text-2xl font-bold ${!isSidebarOpen && 'hidden'}`}>API master</h1>
-          <p className={`text-purple-200 text-sm mt-0 ${!isSidebarOpen && 'hidden'}`}>About system</p>
+          <h1 className={`text-2xl font-medium ${!isSidebarOpen && 'hidden'}`}>API's controle</h1>
+          <p className={`text-purple-200 text-sm mt-0 ${!isSidebarOpen && 'hidden'}`}>Sobre</p>
           {!isSidebarOpen && (
             <div className="flex justify-center">
               <Zap className="text-white fill-white" size={32} />
@@ -76,7 +75,7 @@ export default function APITemplatePlatform() {
           )}
         </div>
         
-        <nav className="flex-1 p-4">
+        <nav className="flex-1 p-4 mt-6">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
             return (
