@@ -2,8 +2,6 @@ import { Terminal, Send, Check, Copy, Layout, Zap, Sparkles } from 'lucide-react
 import { Link } from 'react-router-dom';
 
 const About = () => {
-
-  // Mock data for the "request/response" window
   const requestPayload = {
     prompt: "Generate a CRUD API for a Task Manager",
     language: "Node.js",
@@ -30,9 +28,9 @@ const About = () => {
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
           <Link to={'/process'} className="hover:text-indigo-600 transition-colors mr-2">Processos</Link>
-          <button className="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-800 transition-all shadow-sm">
+          <Link  to={'/login'} className="bg-slate-900 text-white px-5 py-2 rounded-full hover:bg-slate-800 transition-all shadow-sm">
             Launch App
-          </button>
+          </Link>
         </div>
       </nav>
 

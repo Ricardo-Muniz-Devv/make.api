@@ -287,10 +287,9 @@ export default function App() {
                © 2025 Architecture Archive
              </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-8 text-slate-500 font-bold text-xs uppercase tracking-widest">
+          <div className="flex flex-wrap justify-center gap-6 text-slate-500 font-bold text-xs uppercase tracking-widest">
             <a href="#" className="hover:text-purple-600 transition-colors duration-300">Documentation</a>
             <a href="#" className="hover:text-purple-600 transition-colors duration-300">Github</a>
-            <a href="#" className="hover:text-purple-600 transition-colors duration-300">System Status</a>
           </div>
         </div>
       </footer>

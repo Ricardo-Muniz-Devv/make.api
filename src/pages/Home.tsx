@@ -11,6 +11,28 @@ const theme = {
   orgSecondary: '#F0A785'
 }
 
+
+const GlobalStyles = () => (
+  <style dangerouslySetInnerHTML={{ __html: `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root { --font-inter: 'Inter', sans-serif; }
+    body { 
+      font-family: var(--font-inter);
+      background-color: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+    @keyframes subtle-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .animate-subtle-bounce {
+      animation: subtle-bounce 2s ease-in-out infinite;
+    }
+  `}} />
+);
+
 const Home = () => {
 
   return (
@@ -29,9 +51,9 @@ const Home = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="bg-slate-900 text-white px-6 py-2 rounded-full font-semibold hover:bg-slate-800 transition-all active:scale-95">
+          <Link to={'/login'} className="bg-slate-900 text-white px-6 py-2 rounded-full font-semibold hover:bg-slate-800 transition-all active:scale-95">
             Começar Agora
-          </button>
+          </Link>
           <button className="md:hidden p-2 text-slate-600">
             <Menu size={24} />
           </button>
@@ -46,7 +68,7 @@ const Home = () => {
         </div>
 
         <h1 className="text-5xl md:text-2xs lg:text-8xl font-[900] text-slate-900 mb-8 tracking-tighter leading-[0.9] text-balance">
-          Crie fácil, <span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-500">fácil e rápido</span>
+          Crie fácil, <span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-500">e rápido</span>
         </h1>
 
         <p className="text-lg md:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
@@ -58,7 +80,7 @@ const Home = () => {
           <div>
           </div>
           <Link
-            to="/about"
+            to="/login"
             style={{ backgroundColor: theme.secondary }} className="shadow-lg shadow-gray-500/50 
             hover:shadow-xl hover:shadow-purple-500/50 
             transition duration-300 bg-gray-600 text-white px-8 py-4 rounded-xl font- mr-6 font-wide text-lg hover:bg-blue-700 active:scale-95">
@@ -127,11 +149,11 @@ const Home = () => {
       {/* Footer */}
       <footer className="border-t border-slate-200 py-12 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
-          <div>© 2025 CrieFácil Platform. Todos os direitos reservados.</div>
+          <div>© 2025 make.api Platform. Todos os direitos reservados.</div>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-blue-600 transition-colors">Termos</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Privacidade</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Contato</a>
+            <Link to={'/terms'} className="hover:text-blue-600 transition-colors">Termos</Link>
+            <a href="mailto:rcardo.muniz.devv@gmail.com" className="hover:text-blue-600 transition-colors">Contato</a>
+            <Link to={'/about'}>Sobre</Link>
           </div>
         </div>
       </footer>
