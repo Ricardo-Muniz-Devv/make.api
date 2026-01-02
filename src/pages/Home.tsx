@@ -11,7 +11,6 @@ const theme = {
   orgSecondary: '#F0A785'
 }
 
-
 const GlobalStyles = () => (
   <style dangerouslySetInnerHTML={{ __html: `
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
