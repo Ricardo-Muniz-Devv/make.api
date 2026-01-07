@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle2, User, ArrowLeft } from 'lucide-react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../firebase';
 
+const App = () => {
 
-const Login = () => {
-
+  // Navigation State: 'login', 'signup', 'forgot'
   const [view, setView] = useState('login');
   const [formData, setFormData] = useState({
     name: '',
@@ -19,66 +17,63 @@ const Login = () => {
 
   // Simple Validators
   const validate = () => {
-    const newErrors = { name: '', email: '', password: '' };
+    const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (view === 'signup' && !formData.name) {
+    if (view === 'signup' && !formData.name.trim()) {
       newErrors.name = 'Nome completo necessário';
     }
 
-    if (!formData.email) {
-      newErrors.email = 'Email é necessário';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Por favor endereço de e-mail';
+      newErrors.email = 'Por favor insira um endereço de e-mail válido';
     }
 
     if (view !== 'forgot') {
       if (!formData.password) {
         newErrors.password = 'Password is required';
-      } else if (formData.password.length < 8) {
-        newErrors.password = 'A senha tem que ter pelo menos 8 digitos';
+      } else if (formData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters';
       }
     }
 
     setErrors(newErrors);
+    // Returns true if the errors object is empty
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error for this field as user types
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors(prev => {
+        const newErrs = { ...prev };
+        delete newErrs[name];
+        return newErrs;
+      });
     }
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
       setIsSubmitting(true);
-      
-      try {
-        if (view === 'login') {
-          await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        } else if (view === 'signup') {
-          await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-        } else if (view === 'forgot') {
-          await sendPasswordResetEmail(auth, formData.email);
-        }
-        setIsSuccess(true);
-      } catch (error: any) {
-        setErrors({ general: error.message });
-      } finally {
+      // Simulate API call
+      setTimeout(() => {
         setIsSubmitting(false);
-      }
+        setIsSuccess(true);
+      }, 1500);
     }
   };
 
-  const resetFlow = (newView: React.SetStateAction<string>) => {
+  const resetFlow = (newView) => {
     setView(newView);
     setErrors({});
     setIsSuccess(false);
     setIsSubmitting(false);
+    setFormData({ name: '', email: '', password: '' });
   };
 
   if (isSuccess) {
@@ -89,20 +84,20 @@ const Login = () => {
             <CheckCircle2 className="text-purple-600 w-10 h-10" />
           </div>
           <h2 className="text-2xl font-bold text-gray-800">
-            {view === 'forgot' ? 'Email enviado!' : 'Oba! sucesso.'}
+            {view === 'forgot' ? 'Email enviado!' : 'Oba! Sucesso.'}
           </h2>
           <p className="text-gray-600">
-            {view === 'forgot'
-              ? `Verifique sua conta ${formData.email} para as instruções.`
-              : view === 'signup'
-                ? 'Sua conta foi criada.'
-                : 'Você obteve sucesso no login.'}
+            {view === 'forgot' 
+              ? `Verifique sua conta ${formData.email} para as instruções.` 
+              : view === 'signup' 
+                ? 'Sua conta foi criada com sucesso.' 
+                : 'Você realizou o login com sucesso.'}
           </p>
-          <button
+          <button 
             onClick={() => resetFlow('login')}
-            className="text-sm px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold"
           >
-            Back to Login
+            Voltar ao Login
           </button>
         </div>
       </div>
@@ -112,8 +107,8 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row max-w-4xl w-full overflow-hidden">
-
-        {/* Left Side: Aesthetic/Brand Area */}
+        
+        {/* Left Side: Brand Area */}
         <div className="hidden md:flex md:w-1/2 bg-purple-600 p-12 text-white flex-col justify-between relative overflow-hidden">
           <div className="relative z-10">
             <div className="w-12 h-12 bg-white/20 rounded-lg backdrop-blur-sm flex items-center justify-center mb-6">
@@ -123,14 +118,14 @@ const Login = () => {
               {view === 'signup' ? 'Crie um novo futuro com sua solução' : view === 'forgot' ? 'Recuperar acesso' : 'Ambiente seguro.'}
             </h1>
             <p className="text-purple-100 text-lg">
-              {view === 'signup'
-                ? 'Comece essa jornada com o poder do workspace r nodds ferramenta e todos os nossos recursos.'
+              {view === 'signup' 
+                ? 'Comece essa jornada com o poder do workspace e todos os nossos recursos.' 
                 : view === 'forgot'
-                  ? 'Não se preocupe, acontece com os melhores. Vamos ajudá-lo(a) a voltar ao trabalho.'
-                  : 'Gerenciador do seu workspace com enterprise-grade security ferramentas.'}
+                  ? 'Não se preocupe, acontece com os melhores. Vamos ajudá-lo(a) a recuperar seu acesso.'
+                  : 'Gerencie seu workspace com ferramentas de segurança enterprise-grade.'}
             </p>
           </div>
-
+          
           <div className="relative z-10 text-sm text-purple-200">
             &copy; 2024 make.api Inc. All rights reserved.
           </div>
@@ -143,7 +138,7 @@ const Login = () => {
         <div className="w-full md:w-1/2 p-8 lg:p-12 bg-white">
           <div className="max-w-sm mx-auto">
             {view !== 'login' && (
-              <button
+              <button 
                 onClick={() => resetFlow('login')}
                 className="flex items-center text-xs text-purple-600 font-semibold mb-6 hover:text-purple-800 transition-colors"
               >
@@ -152,29 +147,21 @@ const Login = () => {
             )}
 
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              {view === 'login' ? 'Login' : view === 'signup' ? 'Criar uma conta' : 'Esqueci a senha'}
+              {view === 'login' ? 'Login' : view === 'signup' ? 'Criar uma conta' : 'Esqueceu a senha?'}
             </h2>
             <p className="text-gray-500 mb-8 text-sm">
-              {view === 'login'
-                ? 'Entre com seu acesso da sua conta'
+              {view === 'login' 
+                ? 'Entre com seu acesso da sua conta' 
                 : view === 'signup'
-                  ? 'Sign up de graça para iniciar'
-                  : 'Entre com seu email para receber a password reset link'}
+                  ? 'Cadastre-se de graça para iniciar'
+                  : 'Entre com seu email para receber um link de recuperação'}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Error Message */}
-              {errors.general && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                  <p className="flex items-center text-red-600 text-sm">
-                    <AlertCircle size={16} className="mr-2" /> {errors.general}
-                  </p>
-                </div>
-              )}
               {/* Name Field (Sign up only) */}
               {view === 'signup' && (
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Full Name</label>
+                  <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Nome Completo</label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
                       <User size={18} />
@@ -185,7 +172,7 @@ const Login = () => {
                       value={formData.name}
                       onChange={handleChange}
                       className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 border ${errors.name ? 'border-red-400 focus:ring-red-100' : 'border-gray-200 focus:ring-purple-100'} rounded-lg text-sm focus:outline-none focus:ring-4 focus:border-purple-400 transition-all`}
-                      placeholder="John Doe"
+                      placeholder="Seu nome"
                     />
                   </div>
                   {errors.name && (
@@ -198,7 +185,7 @@ const Login = () => {
 
               {/* Email Field */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Email Address</label>
+                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider">E-mail</label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
                     <Mail size={18} />
@@ -209,7 +196,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 border ${errors.email ? 'border-red-400 focus:ring-red-100' : 'border-gray-200 focus:ring-purple-100'} rounded-lg text-sm focus:outline-none focus:ring-4 focus:border-purple-400 transition-all`}
-                    placeholder="name@company.com"
+                    placeholder="email@empresa.com"
                   />
                 </div>
                 {errors.email && (
@@ -219,13 +206,13 @@ const Login = () => {
                 )}
               </div>
 
-              {/* Password Field (Login/Signup only) */}
+              {/* Password Field */}
               {view !== 'forgot' && (
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Password</label>
+                    <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Senha</label>
                     {view === 'login' && (
-                      <button
+                      <button 
                         type="button"
                         onClick={() => resetFlow('forgot')}
                         className="text-[11px] text-purple-600 hover:text-purple-800 font-semibold"
@@ -272,25 +259,25 @@ const Login = () => {
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 ) : (
                   <span>
-                    {view === 'login' ? 'Sign In' : view === 'signup' ? 'Create Account' : 'Enviar link de recuperaçāo'}
+                    {view === 'login' ? 'Entrar' : view === 'signup' ? 'Criar Conta' : 'Enviar link de recuperação'}
                   </span>
                 )}
               </button>
             </form>
 
-            <p className="mt-8 text-center text-xs text-gray-500">
+            <div className="mt-8 text-center text-xs text-gray-500">
               {view === 'login' ? (
-                <>
-                  Você não possui conta?{' '}
+                <p>
+                  Não possui uma conta?{' '}
                   <button onClick={() => resetFlow('signup')} className="text-purple-600 font-bold hover:underline">Criar conta</button>
-                </>
+                </p>
               ) : (
-                <>
-                  Você possui uma conta?{' '}
-                  <button onClick={() => resetFlow('login')} className="text-purple-600 font-bold hover:underline">Login aqui</button>
-                </>
+                <p>
+                  Já possui uma conta?{' '}
+                  <button onClick={() => resetFlow('login')} className="text-purple-600 font-bold hover:underline">Entrar</button>
+                </p>
               )}
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -298,4 +285,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default App;

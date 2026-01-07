@@ -32,6 +32,7 @@ const GlobalStyles = () => (
   `}} />
 );
 
+
 const Home = () => {
 
   return (
